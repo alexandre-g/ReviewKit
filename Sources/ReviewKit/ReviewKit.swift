@@ -5,6 +5,7 @@ import StoreKit
 public enum ReviewKit {
    /// The minimum criteria to be met to request a review from a user.
    public static var criteria: ReviewCriteria = ReviewCriteria(minPositiveEventsWeight: 3, eventsExpireAfterDays: 14)
+   public static var userDefaultsKey = "ReviewKit.positiveEvents"
 
    /// Records a positive event and requests a review if the criteria are met. Use when a user has completed a workflow and is less likely to be annoyed.
    /// - Parameter weight: The weight of the positive event. Defaults to 1.
@@ -30,11 +31,11 @@ public enum ReviewKit {
       self.positiveEvents.append(PositiveEvent(date: Date(), weight: weight))
       self.positiveEvents.removeAll { $0.date < Date().addingTimeInterval(.days(-self.criteria.eventsExpireAfterDays)) }
 
-      UserDefaults.standard.set(self.positiveEvents.map(\.rawValue), forKey: "ReviewKit.positiveEvents")
+      UserDefaults.standard.set(self.positiveEvents.map(\.rawValue), forKey: userDefaultsKey)
    }
 
    static var positiveEvents: [PositiveEvent] = UserDefaults.standard
-      .array(forKey: "ReviewKit.positiveEvents")?
+      .array(forKey: userDefaultsKey)?
       .compactMap { $0 as? String }
       .compactMap { PositiveEvent(rawValue: $0) }
       ?? []
