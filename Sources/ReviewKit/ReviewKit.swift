@@ -5,7 +5,12 @@ import StoreKit
 public enum ReviewKit {
    /// The minimum criteria to be met to request a review from a user.
    public static var criteria: ReviewCriteria = ReviewCriteria(minPositiveEventsWeight: 3, eventsExpireAfterDays: 14)
+
    public static var userDefaultsKey = "ReviewKit.positiveEvents"
+
+   public static var positiveEventCount: Int {
+       positiveEvents.count
+   }
 
    /// Records a positive event and requests a review if the criteria are met. Use when a user has completed a workflow and is less likely to be annoyed.
    /// - Parameter weight: The weight of the positive event. Defaults to 1.
